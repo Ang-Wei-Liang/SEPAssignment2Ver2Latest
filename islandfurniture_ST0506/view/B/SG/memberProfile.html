@@ -28,11 +28,25 @@
 
             var member = null;
             document.addEventListener('DOMContentLoaded', function(){
+                //added code
                 member = JSON.parse(sessionStorage.getItem("member"));
+                document.getElementById('name').value = member.name;
+                document.getElementById('phone').value = member.phone;
+                document.getElementById('country').value = member.city;
+                document.getElementById('address').value = member.address;
+                document.getElementById('securityAnswer').value = member.securityAnswer;
+                document.getElementById('age').value = member.age;
+                document.getElementById('income').value = member.income;
 
                 if(member.sla == 1) {
                     document.getElementById("serviceLevelAgreement").checked = true;
                 }
+
+                //Added code
+                var email = sessionStorage.getItem('memberEmail');
+                document.getElementById('email').value = email;
+
+                
 
                 //Get Bought Items
                 fetch(new Request('/api/getBoughtItem/' + member.id,
