@@ -26,10 +26,6 @@
                 console.log(error);
             });
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ba20d7007fd75bc4af3d2f2eef110abc207c4cbd
             var member = null;
             document.addEventListener('DOMContentLoaded', function(){
                 //added code
@@ -41,16 +37,11 @@
                 document.getElementById('securityAnswer').value = member.securityAnswer;
                 document.getElementById('age').value = member.age;
                 document.getElementById('income').value = member.income;
-<<<<<<< HEAD
-=======
-
->>>>>>> ba20d7007fd75bc4af3d2f2eef110abc207c4cbd
-
+                
                 if(member.sla == 1) {
                     document.getElementById("serviceLevelAgreement").checked = true;
                 }
 
-<<<<<<< HEAD
                 //Added code
                 var email = sessionStorage.getItem('memberEmail');
                 document.getElementById('email').value = email;
@@ -59,18 +50,6 @@
 
                 //Get Bought Items
                 fetch(new Request('/api/getBoughtItem/' + member.id,
-=======
-
-                //Added code
-                var email = sessionStorage.getItem('memberEmail');
-                document.getElementById('email').value = email;
-
-                
-
-                //Get Bought Items
-                fetch(new Request('/api/getBoughtItem/' + member.id,
-
->>>>>>> ba20d7007fd75bc4af3d2f2eef110abc207c4cbd
                 {
                     method: 'GET',
                     headers: {
@@ -224,7 +203,7 @@
                 var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 return startDate.toLocaleDateString("en-US", options);
             }
-
+            //modified code
             async function submitForm() {
                 var oldPassword = document.getElementById('oldPassword').value;
                 var password = document.getElementById("password").value;
@@ -642,7 +621,9 @@
                                             <br/>Checking the box above indicates that you agree to our <a onclick="pdpaWindow()" style="cursor: pointer">personal data protection policy.</a>
                                         </div>
                                         <hr class="more-spaced "/>
+                                        
                                         <h4>Change Password</h4>
+                                        
                                         <div class="form-group">
                                             <label>Old Password (leave blank unless setting a new password).</label>
                                             <input class="form-control" type="password" id="oldPassword">
@@ -665,6 +646,7 @@
                                         </div>
                                     </form>
                                 </div>
+                                
                                 <div id="loyaltyProgram" class="tab-pane">
                                     <h4>Loyalty Program</h4>
                                 </div>
