@@ -211,7 +211,7 @@
                 var ok = true;
                 console.log(oldPassword)
                 if (document.getElementById("profileForm").checkValidity()) {
-                    if (oldPassword != "" && password != "" && repassword != "") {
+                    if (oldPassword != "" && password != "" && repassword != "" ) {
                         var memberData = {
                             id: member.id,
                             password: oldPassword
@@ -251,7 +251,7 @@
                             console.log(error);
                         }); 
                     }
-
+                    
                     if(ok) {
                         var data = {
                             email: document.getElementById("email").value,
@@ -264,8 +264,13 @@
                             age: document.getElementById("age").value,
                             income: document.getElementById("income").value,
                             sla: document.getElementById("serviceLevelAgreement").checked ? 1:0,
-                            password: document.getElementById("password").value
+                            
                         };
+
+                        if (oldPassword !== "") {
+                // If oldPassword is not blank, include the new password for update
+                data.password = password;
+            }
                         
                         fetch(new Request('/api/updateMember',
                         {
