@@ -26,10 +26,6 @@
                 console.log(error);
             });
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ba20d7007fd75bc4af3d2f2eef110abc207c4cbd
             var member = null;
             document.addEventListener('DOMContentLoaded', function(){
                 //added code
@@ -41,25 +37,11 @@
                 document.getElementById('securityAnswer').value = member.securityAnswer;
                 document.getElementById('age').value = member.age;
                 document.getElementById('income').value = member.income;
-<<<<<<< HEAD
-=======
-
->>>>>>> ba20d7007fd75bc4af3d2f2eef110abc207c4cbd
 
                 if(member.sla == 1) {
                     document.getElementById("serviceLevelAgreement").checked = true;
                 }
 
-<<<<<<< HEAD
-                //Added code
-                var email = sessionStorage.getItem('memberEmail');
-                document.getElementById('email').value = email;
-
-                
-
-                //Get Bought Items
-                fetch(new Request('/api/getBoughtItem/' + member.id,
-=======
 
                 //Added code
                 var email = sessionStorage.getItem('memberEmail');
@@ -70,7 +52,6 @@
                 //Get Bought Items
                 fetch(new Request('/api/getBoughtItem/' + member.id,
 
->>>>>>> ba20d7007fd75bc4af3d2f2eef110abc207c4cbd
                 {
                     method: 'GET',
                     headers: {
