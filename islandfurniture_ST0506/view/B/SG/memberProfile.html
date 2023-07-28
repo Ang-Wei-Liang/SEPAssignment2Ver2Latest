@@ -49,7 +49,7 @@
                 
 
                 //Get Bought Items
-                fetch(new Request('/api/getBoughtItem/' + member.id,
+            fetch(new Request('/api/getBoughtItem/' + member.id,
                 {
                     method: 'GET',
                     headers: {
@@ -58,62 +58,78 @@
                 })).then(function (response) {
                     return response.json();
                 }).then(function (boughtItem) {
-                    if(boughtItem == null || boughtItem == '') { //if member do not have any bought items
+                    if (boughtItem == null || boughtItem == '') { //if member do not have any bought items
                         document.getElementById("salesHistoryTab").innerHTML = '<h5 class="center">You do not have any sales history.</h5>';
                     }
                     else {
+
+                        //-------------------------------Start of debugging section-----------------
+
+
                         var htmlTxt = '';
                         var orderIdList = [];
                         var overallPrice = 0;
                         var finalPrice = 0;
-                        //get all order IDs
+
+
+
+                        // Get all order IDs
                         for (i = 0; i < boughtItem.length; i++) {
                             orderIdList[i] = boughtItem[i].id;
                         }
-                        //unduplicate order IDs
+
+                        //---------------------------------Sorting 2.0---------------
+                        // Remove duplicate order IDs
                         orderIdList = [...new Set(orderIdList)];
-                        var temp;
-                        var size = orderIdList.length;
-                        //sort order ID in ascending order
-                        for (i = 0; i < size - 1; i++) {
-                            for (j = 0; j < size - i - 1; j++) {
-                                if (orderIdList[j] > orderIdList[j+1]) {
-                                    temp = orderIdList[j];
-                                    orderIdList[j] = orderIdList[j+1];
-                                    orderIdList[j+1] = temp;
-                                }
-                            }
-                        }
-                                         
-                            htmlTxt += '<h5>Order #' + (1) + '</h5>';
+
+                        // Sort order IDs in ascending order
+                        orderIdList.sort(function (a, b) {
+                            return a - b;
+                        });
+                        //----------------------------------Sorting 2.0 Start ------
+
+                        // Loop through each order ID ------Loop 1: ORDER ----------
+                        for (var i = 0; i < orderIdList.length; i++) {
+                            htmlTxt += '<h5>Order #' + (i+1) + '</h5>';
                             var counter = 0;
-                            //get bought items by order ID
-                            for (j = 0; j < boughtItem.length; j++) {
-                            
-                                if(boughtItem[j].id == orderIdList[0]) {
+
+                            //-------------------------Reset the finalPrice for order under subTotal-------------------
+                            var finalPrice = 0 //This is a change
+
+                            // Get bought items by order ID
+                            for (j = 0; j < boughtItem.length; j++) { //-----------------Loop 2: ITEM -----------
+                                if (boughtItem[j].id == orderIdList[i]) {
                                     var item = boughtItem[j];
-                                    //display top level info
-                                    if(counter == 0) {
+
+                                    // Display top level info
+                                    if (counter == 0) {
                                         let options = {
-                                            weekday: "long", year: "numeric", month: "long",  
-                                            day: "numeric", hour: "2-digit", minute: "2-digit"  
+                                            weekday: "long",
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit"
                                         };
                                         var datePurchased = (new Date(item.createddate)).toLocaleTimeString('en-us', options);
                                         var deliveryDate = addWorkDays(new Date(item.createddate), 5);
                                         htmlTxt += '\
-                                            <h6>Date Purchased: ' + datePurchased + '</h6>\
-                                            <h6>Estimated Delivery Date: ' + deliveryDate + '</h6>\
-                                            <h6 style="text-decoration:underline; font-weight:bold">Delivery Details:</h6>\
-                                            <h6>Address: ' + item.address + '</h6>\
-                                            <h6>Postal Code: ' + item.postalCode + '</h6>\
-                                            <h6>Name: ' + item.customerName + '</h6>\
-                                            <h6>Contact Number: ' + item.phone + '</h6>';
+                    <h6>Date Purchased: ' + datePurchased + '</h6>\
+                    <h6>Estimated Delivery Date: ' + deliveryDate + '</h6>\
+                    <h6 style="text-decoration:underline; font-weight:bold">Delivery Details:</h6>\
+                    <h6>Address: ' + item.address + '</h6>\
+                    <h6>Postal Code: ' + item.postalCode + '</h6>\
+                    <h6>Name: ' + item.customerName + '</h6>\
+                    <h6>Contact Number: ' + item.phone + '</h6>';
                                         counter++;
-                                    }
+                                    } 
+
+        
                                 }
-                            }
-                            //display table info
-                            htmlTxt += '\
+                            } //----------------------------Loop 2: ITEM END------------------------
+
+                            // -------------------Display Table Info (Part of loop 1, not loop 2 --> there is only 1 table per order, not item!)
+                        htmlTxt += '\
                                 <div class="row">\
                                     <div class="col-md-12">\
                                         <div class="row featured-boxes">\
@@ -131,11 +147,11 @@
                                                                 </tr>\
                                                             </thead>\
                                                             <tbody>';
-                            for (y = 0; y < boughtItem.length; y++) {
-                            
-                                if (boughtItem[y].id == orderIdList[0]) {
-                                    var product = boughtItem[y];
-                                    htmlTxt += '\
+                        for (y = 0; y < boughtItem.length; y++) {
+
+                            if (boughtItem[y].id == orderIdList[i]) {
+                                var product = boughtItem[y];
+                                htmlTxt += '\
                                         <tr class="cart_table_item">\
                                             <td class="product-thumbnail">\
                                                 <a href="/B/' + countryPrefix + '/furnitureProductDetails.html?sku=' + product.sku + '"><img width="100" height="100" alt="" class="img-responsive" src="' + product.imageUrl + '"></a>\
@@ -153,11 +169,11 @@
                                                 $<span class="amount">' + product.retailPrice.toFixed(2) * product.quantity + '</span>\
                                             </td>\
                                         </tr>';
-                                    finalPrice += product.retailPrice.toFixed(2) * product.quantity;
-                                    overallPrice += product.retailPrice.toFixed(2) * product.quantity;
-                                }
+                                finalPrice += product.retailPrice.toFixed(2) * product.quantity;
+                                overallPrice += product.retailPrice.toFixed(2) * product.quantity;
                             }
-                            htmlTxt += '\
+                        }
+                        htmlTxt += '\
                                                                 <tr>\
                                                                     <td></td>\
                                                                     <td></td>\
@@ -175,15 +191,27 @@
                                         </div>\
                                     </div>\
                                 </div>';
-                            finalPrice = 0;
 
-                        htmlTxt += '<h4 style="font-weight: bold; padding-left: 20px">Total Amount Spent: $'+ overallPrice + '</h4>';
+                        
+                        } //---------------------  Loop 1: ORDER End ----------
+
+
+
+
+
+
+
+                            
+
+                        //finalPrice = 0;
+
+                        htmlTxt += '<h4 style="font-weight: bold; padding-left: 20px">Total Amount Spent: $' + overallPrice + '</h4>';
                         document.getElementById("salesHistoryTab").innerHTML = htmlTxt;
-                    }
-                }).catch(function(error) {
+                    } //-------------------------------End of debugging section-----------------
+                }).catch(function (error) {
                     console.log(error);
                 });
-            }, false);
+        }, false);
 
             function addWorkDays(startDate, days) {
                 var dow = startDate.getDay();
